@@ -18,13 +18,17 @@ const connectDB = require('./config')
 // Connect to database
 connectDB()
 
+const authRoutes = require('./routes/authRoutes')
+const userRoutes = require('./routes/userRoutes')
+
+const { authorize } = require('./middleware/authMiddleware')
+
 app.use(express.json())
 app.use(cors())
 
-// "root" route         
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+app.use('/api/users', authorize, userRoutes)
+app.use('/auth', authRoutes)
+
 
 // Listen to the given port
 app.listen(PORT, () => {
